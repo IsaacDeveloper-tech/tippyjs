@@ -7,3 +7,18 @@ export function isValidType(value, type)
     
     return typeOfValue === type.toLowerCase();
 }
+
+export function isValidArrayType(values, type)
+{
+    let i = 0;
+    let foundError = false;
+    const MAX_LENGTH = values.length;
+
+    while(!foundError && i < MAX_LENGTH)
+    {
+        foundError = values[i].constructor.name !== type;
+        i++;
+    }
+
+    return !foundError;
+}
