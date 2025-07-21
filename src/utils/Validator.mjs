@@ -1,6 +1,12 @@
 export function isValidType(value, type) 
 {   
+    
     if(type.constructor.name.toLowerCase() !== "string" || type === "")
+        return false;
+
+    if(value === undefined && type === "undefined")
+        return true;
+    else if(value === undefined && type !== "undefined")
         return false;
     
     const typeOfValue = value.constructor.name.toLowerCase();
