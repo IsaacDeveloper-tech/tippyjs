@@ -27,10 +27,8 @@ stack.push(2);
 console.log(stack.peek());
 stack.push(7);
 stack.push(3);
-stack.push(5);
-console.log(stack.pop());
-console.log(stack.pop());
 console.log(stack.length());
 console.log(stack.isEmpty());
-console.log(stack.clear());
-console.log(stack.isEmpty());
+const arrayFromStack = stack.toArray();
+console.log(arrayFromStack.toString());
+console.log(stack.length())
