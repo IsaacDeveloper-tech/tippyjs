@@ -1,6 +1,7 @@
 import { Func } from "./Func.mjs";
 import { Var } from "./Var.mjs";
 import { TArray } from "./Array.mjs";
+import { isValidType } from "../utils/Validator.mjs";
 
 function StackNode(pvalue, pnode){
     return {
@@ -11,45 +12,60 @@ function StackNode(pvalue, pnode){
 
 export const Stack = Func(["String"], "Object", (ptype) => {
     const type = Var("String", ptype);
-    const values = [];
     let windowStack = null;
     let length = Var("Number", 0);
 
     return {
-        push: Func([type.value], "undefined", (value) => {
+        push (value)
+        {
+            if(!isValidType(value, type.value))
+                throw new TypeError();
+
             let temp = StackNode(value, {...windowStack});
             windowStack = {...temp};
             length.value++;
-        }),
-        pop: Func([], type.value, () => {
+        },
+        pop()
+        {
             if(windowStack === null)
-                throw new RangeError();
+                return undefined;
 
             const valueToReturn = windowStack.value;
             let temp = windowStack.nextNode;
             windowStack = {...temp};
             length.value--;
             return valueToReturn;
-        }),
-        peek: Func([], type.value, () => {
+        },
+        peek()
+        {
             if(windowStack === null)
-                throw new RangeError();
+                return undefined;
 
             return windowStack.value;
-        }),
-        isEmpty: Func([], "Boolean", () => {
-            return length.value === 0;
-        }),
-        length: Func([], "Number", () => {
+        },
+        isEmpty()
+        {
+            return this.length() === 0;
+        },
+        length()
+        {
             return length.value;
-        }),
-        clear: Func([], "Boolean", () => {
+        },
+        clear()
+        {
             length.value = 0;
             windowStack = null; 
-            return length.value === 0;
-        }),
-        /*toArray: Func([], "TArray", () => {
+            return this.isEmpty();
+        },
+        toArray () 
+        {
+            let value;
+            let values = [];
+            
+            while(value = this.pop())
+                values.push(value);
+
             return new TArray(type.value, values.length, values);
-        })*/
+        }
     };
 });
